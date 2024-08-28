@@ -26,6 +26,8 @@ parser.add_argument("--num_levels", type=int, default=3, help="Number of levels 
 parser.add_argument("--learning_rate", type=float, default=0.0001, help="Learning rate")
 parser.add_argument("--num_epochs", type=int, default=200, help="Number of training epochs")
 parser.add_argument("--batch_size", type=int, default=6, help="Batch size")
+parser.add_argument("--index", type=int, default=6, help="index")
+
 
 # Input image size
 parser.add_argument("--input_image_width", type=int, default=1024, help="Input image width")
@@ -79,3 +81,4 @@ sam_checkpoint = args.sam_checkpoint
 model_type = args.model_type
 empiar_id = args.empiar_id
 file_name = args.file_name
+index = args.index

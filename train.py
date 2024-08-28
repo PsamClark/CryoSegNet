@@ -20,9 +20,12 @@ import os
 # load the image
 
 
-train_image_path = list(glob.glob(config.train_dataset_path + 'train/images/*.jpg'))
+image_path = list(glob.glob(config.train_dataset_path + 'images/*.png'))
+image_path = [p for p in image_path if 'mask' not in p]
 
-val_image_path = list(glob.glob(config.train_dataset_path + 'val/images/*.jpg'))
+
+train_image_path = image_path[:int(len(image_path)*0.7)]
+val_image_path = image_path[int(len(image_path)*0.7):]
 
 
 train_ds = CryoEMDataset(img_dir=train_image_path, transform=None)
@@ -138,11 +141,11 @@ for e in tqdm(range(config.num_epochs)):
     # serialize the model to disk
     if e % 5 == 0:
         MODEL_PATH = config.architecture_name + " Epochs: {}, Date: {}.pth".format(e, date.today())
-        torch.save(model.state_dict(), os.path.join(f"{config.output_path}/models/", MODEL_PATH))
+        torch.save(model.state_dict(), MODEL_PATH)
         
     if val_loss < best_val_loss:
             best_val_loss = val_loss
-            torch.save(model.state_dict(), os.path.join(f"{config.output_path}/models/", "cryosegnet_best_val_loss.pth"))
+            torch.save(model.state_dict(), "cryosegnet_best_val_loss.pth")
 
 # display the total time needed to perform the training
 end_time = time.time()

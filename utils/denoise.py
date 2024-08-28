@@ -81,10 +81,8 @@ def guided_filter(input_image, guidance_image, radius=20, epsilon=0.1):
     return transform(output_image)
 
 kernel = gaussian_kernel(kernel_size = 9)
-def denoise(image_path):
-    image = mrcfile.read(image_path)
-    image = image.T
-    image = np.rot90(image)
+def denoise(image):
+
     normalized_image = standard_scaler(np.array(image))
     contrast_enhanced_image = contrast_enhancement(normalized_image)
     weiner_filtered_image = wiener_filter(contrast_enhanced_image, kernel, K = 30)

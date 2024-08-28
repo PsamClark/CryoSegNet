@@ -40,15 +40,17 @@ class CryoEMDataset(Dataset):
         # image = np.rot90(image)
         
         image_path = self.img_dir[idx]
-        mask_path = image_path[:-4] + '_mask.jpg'
-        mask_path = mask_path.replace('images', 'masks')
+        mask_path = image_path[:-4] + '_mask.png'
+        #mask_path = mask_path.replace('images', 'masks')
+        try:
+            image = cv2.imread(image_path, 0)
+            mask = cv2.imread(mask_path, 0)
+          
         
-        image = cv2.imread(image_path, 0)
-        mask = cv2.imread(mask_path, 0)
-        
-        image = cv2.resize(image, (config.input_image_width, config.input_image_height))
-        mask = cv2.resize(mask, (config.input_image_width, config.input_image_height))
-        
+            image = cv2.resize(image, (config.input_image_width, config.input_image_height))
+            mask = cv2.resize(mask, (config.input_image_width, config.input_image_height))
+        except:
+            print(image_path)
         image = torch.from_numpy(image).unsqueeze(0).float()
         mask = torch.from_numpy(mask).unsqueeze(0).float()
         
@@ -68,7 +70,7 @@ class CryoEMFineTuneDataset(Dataset):
 
     def __getitem__(self, idx):        
         mask_path = self.mask_dir[idx]
-        image_path = mask_path[:-9] + '.jpg'
+        image_path = mask_path[:-9] + '.png'
         image_path = image_path.replace('masks', 'images')
         #image = denoise(image_path)
         image = cv2.imread(image_path, 0)
